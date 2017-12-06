@@ -37,12 +37,11 @@ def draw(p1, p2, simulations):
             else:
                 continue
         except Exception as e:
-            print(e)
             continue
     # checks that 8 matches were generated
     if len(match_ups) == 8:
         return match_ups, simulations + 1
-    return {}, simulations
+    return [], simulations
 
 
 # adds information about genereated matches to pandas dataframe
@@ -53,35 +52,39 @@ def parse_match_ups(df, match_ups):
 
 # creates percentages of match probability, given the number of simulations
 def sim_percentage(matches_num, simulations):
-    return (matches_num / simulations) * 100
+    return (matches_num / simulations)
 
 
 def main():
     teams_pot_1 = [{"name": "Manchester United", "nation": "EN", "group": "A"},
-                   {"name": "Liverpool", "nation": "EN", "group": "E"},
-                   {"name": "Manchester City", "nation": "EN", "group": "F"},
-                   {"name": "Tottenham", "nation": "EN", "group": "H"},
-                   {"name": "Barcelona", "nation": "ES", "group": "D"},
                    {"name": "PSG", "nation": "FR", "group": "B"},
                    {"name": "Roma", "nation": "IT", "group": "C"},
-                   {"name": "Besiktas", "nation": "TK", "group": "G"}]
+                   {"name": "Barcelona", "nation": "ES", "group": "D"},
+                   {"name": "Liverpool", "nation": "EN", "group": "E"},
+                   {"name": "Manchester City", "nation": "EN", "group": "F"},
+                   {"name": "Besiktas", "nation": "TK", "group": "G"},
+                   {"name": "Tottenham", "nation": "EN", "group": "H"}]
 
     teams_pot_2 = [{"name": "Basel", "nation": "CH", "group": "A"},
                    {"name": "Bayern", "nation": "DE", "group": "B"},
                    {"name": "Chelsea", "nation": "EN", "group": "C"},
-                   {"name": "Sevilla", "nation": "ES", "group": "E"},
-                   {"name": "Real Madrid", "nation": "ES", "group": "H"},
                    {"name": "Juventus", "nation": "IT", "group": "D"},
+                   {"name": "Sevilla", "nation": "ES", "group": "E"},
+                   {"name": "Shaktar", "nation": "UK", "group": "F"},
                    {"name": "Porto", "nation": "PT", "group": "G"},
-                   {"name": "Napoli", "nation": "IT", "group": "F"}]
+                   {"name": "Real Madrid", "nation": "ES", "group": "H"}]
+
     df = pd.DataFrame(0, index=[t["name"] for t in teams_pot_2], columns=[
                       t["name"] for t in teams_pot_1])
     simulations = 0
     for i in range(int(sys.argv[1])):
+        # makes copies of the pots to pop elements later
         p1 = teams_pot_1[:]
         p2 = teams_pot_2[:]
         match_ups, simulations = draw(p1, p2, simulations)
-        parse_match_ups(df, match_ups)
+        # match_ups can return as an empty list
+        if match_ups:
+            parse_match_ups(df, match_ups)
     # print to terminal and save to .csv
     print("Simulations:", simulations)
     print(df)
