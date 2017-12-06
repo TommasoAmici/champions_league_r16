@@ -1,7 +1,7 @@
 # AUTHOR: TOMMASO AMICI
-# simulates draw for round of 16 in the champions league
+# simulates draw for round of 16 in the Champions League
 # prints pandas output to terminal and to draws.csv
-# the number of simulations (about 30% of all tries) is an int passed as argv[1]
+# the number of simulations is an int passed as argv[1]
 
 
 import random
@@ -88,10 +88,10 @@ def main():
     # print to terminal and save to .csv
     print("Simulations:", simulations)
     print(df)
-    df.to_csv("draws.csv", sep=",")
+    df.to_csv("draws_16_CL.csv", sep=",")
     df_percentages = df.apply(sim_percentage, simulations=simulations)
     print(df_percentages)
-    df_percentages.to_csv("draws.csv", sep=",", mode="a")
+    df_percentages.to_csv("draws_16_CL.csv", sep=",", mode="a")
 
 
 main()
